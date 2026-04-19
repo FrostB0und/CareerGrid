@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Career Grid</title>
+    <style>
+        :root {
+            --primary: #0066cc;
+            --primary-dark: #004499;
+            --secondary: #00d9ff;
+            --neutral-50: #f8f9fa;
+            --neutral-100: #e9ecef;
+            --neutral-200: #dee2e6;
+            --neutral-300: #d0d5dd;
+            --neutral-600: #495057;
+            --neutral-700: #343a40;
+            --neutral-900: #1a1d20;
+            --text-primary: #1a1d20;
+            --text-secondary: #495057;
+            --border-radius: 0.5rem;
+            --error: #d32f2f;
+            --success: #2e7d32;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: var(--text-primary);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 2.5rem;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .auth-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1.5px solid var(--neutral-300);
+            border-radius: 0.35rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: white;
+            color: var(--text-primary);
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+            background: white;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="email"]::placeholder,
+        input[type="password"]::placeholder {
+            color: var(--neutral-600);
+        }
+
+        .form-errors {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        .form-errors li {
+            background: #ffebee;
+            border-left: 4px solid var(--error);
+            color: var(--error);
+            padding: 0.75rem 1rem;
+            border-radius: 0.25rem;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            animation: shake 0.3s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .errorlist {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        .errorlist li {
+            background: #ffebee;
+            border-left: 4px solid var(--error);
+            color: var(--error);
+            padding: 0.75rem 1rem;
+            border-radius: 0.25rem;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 0.85rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.35rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.25);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            background: var(--neutral-300);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--neutral-200);
+        }
+
+        .auth-footer p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 2px;
+        }
+
+        .auth-footer a:hover {
+            color: var(--primary-dark);
+            border-bottom-color: var(--primary);
+        }
+
+        .brand-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            text-decoration: none;
+        }
+
+        .brand-link:hover {
+            opacity: 0.8;
+        }
+
+        .brand-icon {
+            font-size: 1.5rem;
+        }
+
+        .brand-text {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        /* Form field wrapper for Django form rendering */
+        .form-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-field label {
+            margin-bottom: 0.5rem;
+        }
+
+        .form-field input {
+            width: 100%;
+        }
+
+        .helptext {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+            display: block;
+        }
+
+        .helptext ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 2rem;
+            }
+
+            .auth-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .submit-btn {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <a href="/" class="brand-link" style="justify-content: center; text-decoration: none;">
+                <span style="font-size: 1.5rem; color: var(--primary);">🚀</span>
+                <span class="brand-text">Career Grid</span>
+            </a>
+            <h1>Welcome Back</h1>
+            <p>Sign in to your account to continue</p>
+        </div>
+
+        <form method="post" class="form-wrapper">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <ul class="errorlist">
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% for field in form %}
+                <div class="form-field">
+                    {{ field.label_tag }}
+                    {% if field.errors %}
+                        {{ field }}
+                        <ul class="errorlist">
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
+                    {% if field.help_text %}
+                        <span class="helptext">{{ field.help_text|safe }}</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="submit-btn">Sign In</button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Don&apos;t have an account? <a href="/register/">Create one</a></p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

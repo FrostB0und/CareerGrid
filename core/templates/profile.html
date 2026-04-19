@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Career Grid</title>
+    <style>
+        /* (your existing CSS stays EXACTLY the same) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            color: #2d3748;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.15);
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .profile-header {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: bold;
+            flex-shrink: 0;
+            border: 4px solid white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .profile-info h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .profile-info p {
+            font-size: 1rem;
+            opacity: 0.95;
+            margin-bottom: 0.25rem;
+        }
+
+        .bio {
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin: 2rem 0 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #0066cc;
+            display: inline-block;
+        }
+
+        .posts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .post-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-content {
+            color: #2d3748;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        .empty-state {
+            background: white;
+            border-radius: 8px;
+            padding: 3rem 2rem;
+            text-align: center;
+            border: 2px dashed #cbd5e0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <div class="header-content">
+
+        <div class="profile-header">
+
+            <div class="avatar">
+                {{ profile_user.username|first|upper }}
+            </div>
+
+            <div class="profile-info">
+                <h1>{{ profile_user.username }}</h1>
+                <p class="email">{{ profile_user.email }}</p>
+
+                <!-- ✅ BIO ADDED HERE -->
+                <p class="bio">
+                    <p class="extra-info">
+    {% if profile.location %}
+        📍 {{ profile.location }}
+    {% endif %}
+</p>
+
+<p class="extra-info">
+    {% if profile.phone %}
+        📞 {{ profile.phone }}
+    {% endif %}
+</p>
+
+<p class="extra-info">
+    {% if profile.website %}
+        🔗 <a href="{{ profile.website }}" target="_blank">{{ profile.website }}</a>
+    {% endif %}
+</p>
+                    {% if profile.bio %}
+                        {{ profile.bio }}
+                    {% else %}
+                        No bio yet.
+                    {% endif %}
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="container">
+
+    <h2 class="section-title">Posts</h2>
+
+    {% if posts %}
+        <div class="posts-container">
+
+            {% for post in posts %}
+                <div class="post-card">
+                    <div class="post-content">
+                        {{ post.content }}
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>No posts yet. Start sharing your career journey!</p>
+        </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
