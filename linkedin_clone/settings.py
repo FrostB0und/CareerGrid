@@ -120,3 +120,6 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+CSRF_TRUSTED_ORIGINS = [
+    "https://careergrid-production.up.railway.app/",
+]
