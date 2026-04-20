@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-7r^tq_l2@n4u&u_6kl0#i*xt1z3d9_zk*zfmxzf#xzp%92$xw$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["https://careergrid-production.up.railway.app/register/"]
 
 
 # Application definition
@@ -123,3 +123,5 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 CSRF_TRUSTED_ORIGINS = [
     "https://careergrid-production.up.railway.app/",
 ]
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
