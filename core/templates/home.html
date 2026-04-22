@@ -1,11 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Grid - Professional Network Feed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --primary: #0066cc;
+            --primary-dark: #004499;
+            --secondary: #00d9ff;
+            --neutral-50: #f8f9fa;
+            --neutral-100: #e9ecef;
+            --neutral-200: #dee2e6;
+            --text-primary: #1a1d20;
+            --text-secondary: #495057;
+            --border-radius: 0.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--neutral-50);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            color: var(--text-primary);
+        }
+
+        /* NAVBAR */
+        nav {
+            background: white;
+            border-bottom: 1px solid var(--neutral-200);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 650px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .nav-brand {
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-welcome {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .nav-btn {
+            padding: 0.5rem 0.9rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: 0.2s ease;
+        }
+
+        .nav-btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .nav-btn-secondary {
+            background: #eee;
+            color: black;
+        }
+
+        .nav-btn-danger {
+            background: #e63946;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .container-main {
+            max-width: 650px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 3rem 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: var(--border-radius);
+        }
+
+        .feed {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .post {
+            background: white;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--neutral-200);
+            padding: 1.5rem;
+        }
+
+        .post-header {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .username a {
+            font-weight: 600;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .username a:hover {
+            color: var(--primary);
+        }
+
+        .post-time {
+            font-size: 0.75rem;
+            color: gray;
+        }
+
+        .post-content {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
 <body>
 
+<!-- NAVBAR -->
 <nav>
     <div class="nav-container">
+
         <a href="/" class="nav-brand">Career Grid</a>
 
         <div class="nav-right">
+
             {% if user.is_authenticated %}
+
                 <span class="nav-welcome">
                     Hi, <strong>{{ user.username }}</strong>
                 </span>
@@ -14,22 +183,37 @@
                     + Post
                 </a>
 
-                <a href="/profile/{{ user.username }}/" class="nav-btn nav-btn-secondary">
+                <a href="/edit-profile/" class="nav-btn nav-btn-secondary">
                     Profile
                 </a>
 
-                <a href="/logout/" class="nav-btn nav-btn-danger">
-                    Logout
-                </a>
+                <form method="post" action="/logout/" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-btn nav-btn-danger">
+                        Logout
+                    </button>
+                </form>
+
             {% else %}
-                <a href="/login/" class="nav-btn nav-btn-primary">Login</a>
-                <a href="/register/" class="nav-btn nav-btn-secondary">Register</a>
+
+                <a href="/login/" class="nav-btn nav-btn-primary">
+                    Login
+                </a>
+
+                <a href="/register/" class="nav-btn nav-btn-secondary">
+                    Register
+                </a>
+
             {% endif %}
+
         </div>
+
     </div>
 </nav>
 
+<!-- MAIN CONTENT -->
 <div class="container-main">
+
     <div class="header">
         <h1>Career Grid</h1>
         <p>Your Professional Network</p>
@@ -37,40 +221,44 @@
 
     <div class="feed">
 
-        {% if posts %}
-            {% for post in posts %}
-            <div class="post">
-                <div class="post-header">
-                    <div class="avatar">
-                        {{ post.user.username|first|upper }}
-                    </div>
+        {% for post in posts %}
+        <div class="post">
 
-                    <div class="post-info">
-                        <div class="username">
-                            <a href="/profile/{{ post.user.username }}/">
-                                {{ post.user.username }}
-                            </a>
-                        </div>
+            <div class="post-header">
 
-                        <div class="post-time">
-                            {{ post.created_at|timesince }} ago
-                        </div>
-                    </div>
+                <div class="avatar">
+                    {{ post.user.username|first|upper }}
                 </div>
 
-                <p class="post-content">
-                    {{ post.content }}
-                </p>
+                <div>
+
+                    <div class="username">
+                        <a href="/profile/{{ post.user.username }}/">
+                            {{ post.user.username }}
+                        </a>
+                    </div>
+
+                    <div class="post-time">
+                        {{ post.created_at }}
+                    </div>
+
+                </div>
+
             </div>
-            {% endfor %}
-        {% else %}
-            <div class="empty-state">
-                <h3>No posts yet</h3>
-                <p>Be the first to post something 🚀</p>
+
+            <div class="post-content">
+                {{ post.content }}
             </div>
-        {% endif %}
+
+        </div>
+
+        {% empty %}
+        <p>No posts yet.</p>
+        {% endfor %}
 
     </div>
+
 </div>
 
 </body>
+</html>
