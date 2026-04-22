@@ -16,8 +16,9 @@ DEBUG = False
 # ✅ IMPORTANT: ONLY DOMAIN (NO https, NO paths)
 ALLOWED_HOSTS = [
     "careergrid-production.up.railway.app",
+    "127.0.0.1",
+    "localhost",
 ]
-
 
 # Application definition
 INSTALLED_APPS = [
