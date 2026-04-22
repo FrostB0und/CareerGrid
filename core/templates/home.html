@@ -3,261 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Career Grid - Professional Network Feed</title>
+    <title>Career Grid</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
     <style>
         :root {
-            --primary: #0066cc;
-            --primary-dark: #004499;
-            --secondary: #00d9ff;
-            --neutral-50: #f8f9fa;
-            --neutral-100: #e9ecef;
-            --neutral-200: #dee2e6;
-            --text-primary: #1a1d20;
-            --text-secondary: #495057;
-            --border-radius: 0.5rem;
+            --primary: #185FA5;
+            --primary-dark: #0C447C;
+            --primary-light: #E6F1FB;
         }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f3f2ef; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; color: #1a1d20; }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* NAV */
+        nav { background: white; border-bottom: 1px solid #e0e0e0; padding: 0.75rem 1.5rem; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+        .nav-brand { font-weight: 600; color: var(--primary); text-decoration: none; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .nav-brand-icon { width: 30px; height: 30px; background: var(--primary); border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+        .nav-brand-icon svg { width: 17px; height: 17px; fill: white; }
+        .nav-right { display: flex; align-items: center; gap: 8px; }
+        .nav-welcome { font-size: 0.85rem; color: #666; }
+        .btn { padding: 6px 14px; border-radius: 6px; font-size: 0.82rem; font-weight: 500; text-decoration: none; border: 1px solid #ccc; background: white; color: #333; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+        .btn-primary { background: var(--primary); color: white; border-color: var(--primary); }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-danger { background: #A32D2D; color: white; border-color: #A32D2D; }
 
-        body {
-            background-color: var(--neutral-50);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-            color: var(--text-primary);
-        }
+        /* LAYOUT */
+        .layout { max-width: 960px; margin: 0 auto; padding: 1.5rem 1rem; display: grid; grid-template-columns: 240px 1fr; gap: 1.25rem; align-items: start; }
 
-        /* NAVBAR */
-        nav {
-            background: white;
-            border-bottom: 1px solid var(--neutral-200);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+        /* SIDEBAR */
+        .sidebar { display: flex; flex-direction: column; gap: 1rem; position: sticky; top: 72px; }
+        .profile-card { background: white; border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; }
+        .profile-banner { height: 56px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
+        .profile-card-body { padding: 0 1rem 1rem; }
+        .profile-avatar { width: 56px; height: 56px; border-radius: 50%; background: #B5D4F4; color: var(--primary-dark); font-size: 22px; font-weight: 600; display: flex; align-items: center; justify-content: center; border: 3px solid white; margin-top: -28px; margin-bottom: 8px; }
+        .profile-name { font-size: 14px; font-weight: 600; }
+        .profile-meta { font-size: 12px; color: #666; margin-top: 2px; }
+        .divider { border: none; border-top: 1px solid #e0e0e0; margin: 10px 0; }
+        .profile-stat { display: flex; justify-content: space-between; font-size: 12px; padding: 3px 0; }
+        .profile-stat-label { color: #666; }
+        .profile-stat-val { color: var(--primary); font-weight: 600; }
 
-        .nav-container {
-            max-width: 650px;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 1rem;
-        }
+        .sidebar-box { background: white; border: 1px solid #e0e0e0; border-radius: 10px; padding: 1rem; }
+        .sidebar-title { font-size: 13px; font-weight: 600; margin-bottom: 10px; color: #333; }
+        .suggestion { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid #f0f0f0; }
+        .suggestion:last-child { border-bottom: none; }
+        .sug-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+        .sug-info { flex: 1; min-width: 0; }
+        .sug-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .sug-role { font-size: 11px; color: #666; }
+        .follow-btn { font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--primary); color: var(--primary); background: none; cursor: pointer; white-space: nowrap; font-weight: 500; }
+        .follow-btn:hover { background: var(--primary-light); }
 
-        .nav-brand {
-            font-weight: bold;
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 1.1rem;
-        }
+        /* FEED */
+        .feed { display: flex; flex-direction: column; gap: 1rem; }
+        .compose-box { background: white; border: 1px solid #e0e0e0; border-radius: 10px; padding: 1rem; display: flex; gap: 10px; align-items: center; }
+        .compose-avatar { width: 42px; height: 42px; border-radius: 50%; background: #B5D4F4; color: var(--primary-dark); font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; text-decoration: none; }
+        .compose-trigger { flex: 1; border: 1px solid #ccc; border-radius: 20px; padding: 9px 16px; font-size: 13px; color: #666; background: none; cursor: pointer; text-align: left; font-family: inherit; }
+        .compose-trigger:hover { background: #f5f5f5; border-color: #aaa; }
 
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
+        .post-card { background: white; border: 1px solid #e0e0e0; border-radius: 10px; padding: 1.1rem 1.25rem; }
+        .post-header { display: flex; gap: 10px; margin-bottom: 10px; }
+        .post-avatar { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; flex-shrink: 0; text-decoration: none; }
+        .post-username { font-size: 14px; font-weight: 600; color: #1a1d20; text-decoration: none; }
+        .post-username:hover { color: var(--primary); }
+        .post-role { font-size: 12px; color: #666; }
+        .post-time { font-size: 11px; color: #999; margin-top: 1px; }
+        .post-tag { display: inline-block; font-size: 11px; padding: 2px 9px; border-radius: 20px; background: var(--primary-light); color: var(--primary-dark); margin-bottom: 8px; font-weight: 500; }
+        .post-content { font-size: 14px; line-height: 1.65; color: #333; margin-bottom: 12px; }
+        .post-actions { display: flex; gap: 2px; border-top: 1px solid #f0f0f0; padding-top: 8px; }
+        .action-btn { display: flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: 6px; border: none; background: none; cursor: pointer; font-size: 12px; color: #666; font-family: inherit; }
+        .action-btn:hover { background: #f5f5f5; color: #333; }
+        .action-btn.liked { color: var(--primary); }
+        .action-btn svg { width: 16px; height: 16px; }
 
-        .nav-welcome {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .nav-btn {
-            padding: 0.5rem 0.9rem;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: 0.2s ease;
-        }
-
-        .nav-btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .nav-btn-primary:hover {
-            background: var(--primary-dark);
-        }
-
-        .nav-btn-secondary {
-            background: #eee;
-            color: black;
-        }
-
-        .nav-btn-danger {
-            background: #e63946;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        .container-main {
-            max-width: 650px;
-            margin: 0 auto;
-            padding: 1.5rem 1rem;
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 3rem 1.5rem;
-            margin-bottom: 2rem;
-            border-radius: var(--border-radius);
-        }
-
-        .feed {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .post {
-            background: white;
-            border-radius: var(--border-radius);
-            border: 1px solid var(--neutral-200);
-            padding: 1.5rem;
-        }
-
-        .post-header {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .username a {
-            font-weight: 600;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .username a:hover {
-            color: var(--primary);
-        }
-
-        .post-time {
-            font-size: 0.75rem;
-            color: gray;
-        }
-
-        .post-content {
-            margin-top: 1rem;
-        }
+        .empty-feed { text-align: center; padding: 3rem 1rem; background: white; border: 1px solid #e0e0e0; border-radius: 10px; color: #888; font-size: 14px; }
     </style>
 </head>
-
 <body>
 
-<!-- NAVBAR -->
 <nav>
-    <div class="nav-container">
-
-        <a href="/" class="nav-brand">Career Grid</a>
-
-        <div class="nav-right">
-
-            {% if user.is_authenticated %}
-
-                <span class="nav-welcome">
-                    Hi, <strong>{{ user.username }}</strong>
-                </span>
-
-                <a href="/create/" class="nav-btn nav-btn-primary">
-                    + Post
-                </a>
-
-                <a href="/edit-profile/" class="nav-btn nav-btn-secondary">
-                    Profile
-                </a>
-
-                <form method="post" action="/logout/" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="nav-btn nav-btn-danger">
-                        Logout
-                    </button>
-                </form>
-
-            {% else %}
-
-                <a href="/login/" class="nav-btn nav-btn-primary">
-                    Login
-                </a>
-
-                <a href="/register/" class="nav-btn nav-btn-secondary">
-                    Register
-                </a>
-
-            {% endif %}
-
+    <a href="/" class="nav-brand">
+        <div class="nav-brand-icon">
+            <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10-2h4v2h-4V4z"/></svg>
         </div>
-
+        Career Grid
+    </a>
+    <div class="nav-right">
+        {% if user.is_authenticated %}
+            <span class="nav-welcome">Hi, <strong>{{ user.username }}</strong></span>
+            <a href="/profile/{{ user.username }}/" class="btn">My Profile</a>
+            <form method="post" action="/logout/" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
+        {% else %}
+            <a href="/login/" class="btn btn-primary">Login</a>
+            <a href="/register/" class="btn">Register</a>
+        {% endif %}
     </div>
 </nav>
 
-<!-- MAIN CONTENT -->
-<div class="container-main">
+<div class="layout">
 
-    <div class="header">
-        <h1>Career Grid</h1>
-        <p>Your Professional Network</p>
-    </div>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        {% if user.is_authenticated %}
+        <div class="profile-card">
+            <div class="profile-banner"></div>
+            <div class="profile-card-body">
+                <div class="profile-avatar">{{ user.username|first|upper }}</div>
+                <div class="profile-name">{{ user.get_full_name|default:user.username }}</div>
+                <div class="profile-meta">
+                    {% if user.profile.location %}{{ user.profile.location }}{% endif %}
+                </div>
+                <hr class="divider">
+                <div class="profile-stat">
+                    <span class="profile-stat-label">Followers</span>
+                    <span class="profile-stat-val">{{ user.followers.count }}</span>
+                </div>
+                <div class="profile-stat">
+                    <span class="profile-stat-label">Following</span>
+                    <span class="profile-stat-val">{{ user.following.count }}</span>
+                </div>
+                <div class="profile-stat">
+                    <span class="profile-stat-label">Posts</span>
+                    <span class="profile-stat-val">{{ user.post_set.count }}</span>
+                </div>
+                <hr class="divider">
+                <a href="/edit-profile/" class="btn" style="width:100%;justify-content:center;margin-top:4px;">Edit Profile</a>
+            </div>
+        </div>
+        {% endif %}
 
-    <div class="feed">
+        <div class="sidebar-box">
+            <div class="sidebar-title">Suggested connections</div>
+            {% for suggestion in suggestions %}
+            <div class="suggestion">
+                <div class="sug-avatar" style="background:#E1F5EE;color:#085041;">
+                    {{ suggestion.username|first|upper }}
+                </div>
+                <div class="sug-info">
+                    <div class="sug-name">{{ suggestion.get_full_name|default:suggestion.username }}</div>
+                    <div class="sug-role">{{ suggestion.profile.bio|truncatechars:30|default:"Career Grid member" }}</div>
+                </div>
+                <form method="post" action="{% url 'follow_toggle' suggestion.username %}">
+                    {% csrf_token %}
+                    <button type="submit" class="follow-btn">Follow</button>
+                </form>
+            </div>
+            {% empty %}
+            <p style="font-size:13px;color:#999;">No suggestions yet.</p>
+            {% endfor %}
+        </div>
+    </aside>
+
+    <!-- FEED -->
+    <main class="feed">
+
+        {% if user.is_authenticated %}
+        <div class="compose-box">
+            <a href="/profile/{{ user.username }}/" class="compose-avatar">
+                {{ user.username|first|upper }}
+            </a>
+            <form method="post" action="/create/" style="flex:1;">
+                {% csrf_token %}
+                <button type="submit" class="compose-trigger" onclick="window.location='/create/'; return false;">
+                    What's on your mind, {{ user.first_name|default:user.username }}?
+                </button>
+            </form>
+        </div>
+        {% endif %}
 
         {% for post in posts %}
-        <div class="post">
-
+        <div class="post-card">
             <div class="post-header">
-
-                <div class="avatar">
+                <a href="/profile/{{ post.user.username }}/" class="post-avatar" style="background:#E6F1FB;color:#0C447C;">
                     {{ post.user.username|first|upper }}
-                </div>
-
+                </a>
                 <div>
-
-                    <div class="username">
-                        <a href="/profile/{{ post.user.username }}/">
-                            {{ post.user.username }}
-                        </a>
-                    </div>
-
-                    <div class="post-time">
-                        {{ post.created_at }}
-                    </div>
-
+                    <a href="/profile/{{ post.user.username }}/" class="post-username">
+                        {{ post.user.get_full_name|default:post.user.username }}
+                    </a>
+                    <div class="post-role">Career Grid member</div>
+                    <div class="post-time">{{ post.created_at|timesince }} ago</div>
                 </div>
-
             </div>
-
-            <div class="post-content">
-                {{ post.content }}
+            <div class="post-content">{{ post.content }}</div>
+            <div class="post-actions">
+                <button class="action-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                    Like
+                </button>
+                <button class="action-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"/></svg>
+                    Comment
+                </button>
+                <button class="action-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/></svg>
+                    Share
+                </button>
             </div>
-
         </div>
-
         {% empty %}
-        <p>No posts yet.</p>
+        <div class="empty-feed">
+            <p>No posts yet — follow some people or create your first post!</p>
+        </div>
         {% endfor %}
 
-    </div>
-
+    </main>
 </div>
 
 </body>

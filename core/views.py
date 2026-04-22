@@ -5,7 +5,27 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 
 from .models import Post, Profile
+from django.db.models import Q
 
+def home(request):
+    if request.user.is_authenticated:
+        following_ids = Follow.objects.filter(
+            follower=request.user
+        ).values_list('following_id', flat=True)
+
+        posts = Post.objects.filter(
+            user__in=list(following_ids) + [request.user.id]
+        ).order_by('-created_at')
+
+        # Suggest users not already followed (excluding yourself), max 3
+        suggestions = User.objects.exclude(
+            id__in=list(following_ids) + [request.user.id]
+        )[:3]
+    else:
+        posts = Post.objects.all().order_by('-created_at')
+        suggestions = []
+
+    return render(request, 'home.html', {'posts': posts, 'suggestions': suggestions})
 
 # ---------------- HOME ----------------
 def home(request):
